@@ -3,23 +3,21 @@ import '../../App.sass'
 import axios from 'axios'
 // import '/./App.sass';
 const Main: React.FC = () => {
-    const [surveys, setSurveys] = React.useState<String[]>(["survey 1", "survey 2", "survey 3", "survey 4"]);
+    const [surveys, setSurveys] = React.useState<String[]>([]);
     const [assignedstate, setAssignedstate] = React.useState<String[]>([]);
-    const [employess, setEmployess] = React.useState<String[]>(["emp 1", "emp 2", "emp 3", "emp 4"]);
-
+    const [employess, setEmployess] = React.useState<String[]>([]);
+    const [surveyname, setSurveyname] = React.useState("");
+    const [assignedsurveyname, setAssignedsurveyname] = React.useState("");
 
     React.useEffect(() => {
         getEmployess();
     }, []);
 
     const getEmployess = () => {
-        axios.get('http://localhost:5000/societydetails')
+        axios.get('http://localhost:8899/fetchEmp')
             .then(function (response) {
-                const entriesString = response.data.result;
-                const employess = entriesString;
+                const employess = response.data.empIds;
                 setEmployess(employess);
-                // console.log(entries);
-                // console.log(entries.length)
             })
             .catch(function (error) {
                 console.log(error);
@@ -38,8 +36,20 @@ const Main: React.FC = () => {
         // console.log(assignedsurvey);
     }
     const getdetail = (val: any) => {
-        console.log(val);
+        let data = {"empId":val};
+        setAssignedstate([]);
+        axios.post('http://localhost:8899/fetchSurvey',data)
+            .then(function (response) {
+                const surveylist = response.data.surveylist;
+                setSurveys(surveylist);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
+    // const search =(surveyname: any) =>{
+
+    // }
     return (
         <div>
 
@@ -65,8 +75,6 @@ const Main: React.FC = () => {
                                         </a>
                                             ))
                                         }
-
-
                                     </div>
                                 </div>
                             </div>
@@ -79,9 +87,14 @@ const Main: React.FC = () => {
             <section className="section">
                 <div className="columns">
                     <div className="column is-half">
+                        <div className="field has-addons">
+                            <div className="control">
+                                <input className="input" type="text" placeholder="Search survey"  onChange={(event) => setSurveyname(event.currentTarget.value)}/>
+                            </div>
+                        </div>
                         {
                             surveys.map((val:String)=>
-                            (val)?
+                            (val && (surveyname.length == 0 || surveyname ==val))?
                             (  
                                 <section>
                                     <div className="card">
@@ -101,9 +114,14 @@ const Main: React.FC = () => {
                         }
                     </div>
                     <div className="column is-half">
+                        <div className="field has-addons">
+                            <div className="control">
+                                <input className="input" type="text" placeholder="Search assigned survey" onChange={(event) => setAssignedsurveyname(event.currentTarget.value)} />
+                            </div>
+                        </div>
                         {
                             assignedstate.map((assigned_survey:String)=>
-                            (assigned_survey)?
+                            (assigned_survey && (assignedsurveyname.length == 0 || assignedsurveyname ==assigned_survey))?
                             (
                                 <section>
                                 <div className="card">

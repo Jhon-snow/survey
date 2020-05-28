@@ -57,7 +57,7 @@ const Main: React.FC = () => {
                 <div className="dropdown is-hoverable">
                     <div className="dropdown-trigger">
                         <button className="button" aria-haspopup="true" aria-controls="dropdown-menu4">
-                            <span className="has-text-weight-semibold">Hover me</span>
+                            <span className="has-text-weight-semibold">Select Employee</span>
                             <span className="icon is-small">
                                 <i className="fas fa-angle-down" aria-hidden="true"></i>
                             </span>
@@ -87,11 +87,13 @@ const Main: React.FC = () => {
             <section className="section">
                 <div className="columns">
                     <div className="column is-half">
-                        <div className="field has-addons">
+                        
+                        <div className="card">
                             <div className="control">
                                 <input className="input" type="text" placeholder="Search survey"  onChange={(event) => setSurveyname(event.currentTarget.value)}/>
                             </div>
                         </div>
+                        
                         {
                             surveys.map((val:String)=>
                             (val && (surveyname.length == 0 || surveyname ==val))?
@@ -114,7 +116,7 @@ const Main: React.FC = () => {
                         }
                     </div>
                     <div className="column is-half">
-                        <div className="field has-addons">
+                        <div className="card">
                             <div className="control">
                                 <input className="input" type="text" placeholder="Search assigned survey" onChange={(event) => setAssignedsurveyname(event.currentTarget.value)} />
                             </div>
